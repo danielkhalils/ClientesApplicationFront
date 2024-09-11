@@ -3,13 +3,12 @@ import { NavbarComponent } from './template/navbar/navbar.component';
 import { SidebarComponent } from './template/sidebar/sidebar.component';
 import jQuery from 'jquery';
 import { HomeComponent } from './template/home/home.component';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
-  standalone: true,
-  imports: [NavbarComponent, SidebarComponent, HomeComponent],
 })
 export class AppComponent implements AfterViewInit {
   title = 'ClientesApplicationFront';

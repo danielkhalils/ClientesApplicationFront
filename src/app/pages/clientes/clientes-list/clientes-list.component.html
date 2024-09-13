@@ -1,0 +1,41 @@
+<h1 class="mt-4">Lista de Clientes</h1>
+<ol class="breadcrumb mb-4">
+  <li class="breadcrumb-item active">Lista</li>
+</ol>
+<div class="container">
+  <div class="row">
+    <div class="col-md-2">
+      <button class="btn btn-warning" (click)="novoCadastro()">
+        <i class="fa fa-plus mr-2"></i> Novo
+      </button>
+    </div>
+  </div>
+  <br />
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table table-condensed table-hover">
+        <thead>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>CPF</th>
+          <th>Data de Cadastro</th>
+          <th></th>
+        </thead>
+        <tbody *ngFor="let cliente of clientes">
+          <td>{{ cliente.id }}</td>
+          <td>{{ cliente.nome }}</td>
+          <td>{{ cliente.cpf }}</td>
+          <td>{{ cliente.dataCadastro }}</td>
+          <td>
+            <button
+              class="btn btn-primary"
+              routerLink="/clientes-form/{{ cliente.id }}"
+            >
+              <i class="fa fa-pen"></i>
+            </button>
+          </td>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

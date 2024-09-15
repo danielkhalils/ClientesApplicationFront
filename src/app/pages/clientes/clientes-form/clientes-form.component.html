@@ -3,7 +3,7 @@
   <li class="breadcrumb-item active">{{ cliente?.id ? 'Edição': 'Cadastro'}}</li>
 </ol>
 <div class="container">
-  <form #clienteForm="ngForm" (ngSubmit)="onSubmit()">
+  <form #clienteForm="ngForm" (ngSubmit)="saveOrUpdate()">
     <div class="row">
       <div class="col-md-12">
         <div class="alert alert-success" role="alert" *ngIf="sucesso == true">

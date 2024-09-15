@@ -18,11 +18,19 @@ export class ClientesService {
     return this.http.post<Cliente>(`${environment.cliente}`, cliente);
   }
 
+  atualizar( cliente : Cliente ) : Observable<any> {
+    return this.http.put<Cliente>(`${environment.cliente}/${cliente.id}`, cliente);
+  }
+
   getClientes() : Observable<Cliente[]>{
     return this.http.get<Cliente[]>(`${environment.cliente}`);
   }
   getClienteById(id: number) : Observable<Cliente>{
     return this.http.get<any>(`${environment.cliente}/${id}`)
+  }
+
+  deletar(cliente: Cliente) : Observable<any>{
+    return this.http.delete<any>(`${environment.cliente}/${cliente.id}`)
   }
 
 }

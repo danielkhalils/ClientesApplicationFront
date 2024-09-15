@@ -29,17 +29,30 @@ export class ClientesFormComponent implements OnInit{
     this.findById();
   }
 
-  onSubmit(){
-    this.clienteService
-      .salvar(this.cliente!)
-      .subscribe( response => {
-        this.sucesso = true;
-        this.errors = [];
-        this.cliente = response;
-      }, errorResponse => {
-        this.sucesso = false;
-        this.errors = errorResponse.error.errors;
-      })
+  saveOrUpdate(){
+    if(this.id){
+      //Atualizar Cliente
+      this.clienteService
+        .atualizar(this.cliente!)
+        .subscribe( response => {
+          this.sucesso = true;
+          this.errors = [];
+        }, errorResponse => {
+          this.errors = ['Erro ao atualizar o cliente.']
+        })
+    }else {
+      //Salva Cliente
+      this.clienteService
+        .salvar(this.cliente!)
+        .subscribe( response => {
+          this.sucesso = true;
+          this.errors = [];
+          this.cliente = response;
+        }, errorResponse => {
+          this.sucesso = false;
+          this.errors = errorResponse.error.errors;
+        })
+    }
   }
 
   public voltar(){
@@ -60,5 +73,4 @@ export class ClientesFormComponent implements OnInit{
       }
     })
   }
-
 }

@@ -6,11 +6,13 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-clientes-list',
   templateUrl: './clientes-list.component.html',
-  styleUrl: './clientes-list.component.css'
+  styleUrl: './clientes-list.component.css',
 })
-export class ClientesListComponent implements OnInit{
-
+export class ClientesListComponent implements OnInit {
   clientes?: Cliente[] = [];
+  clienteSelecionado?: Cliente;
+  mensagemSucesso?: string;
+  mensagemErro?: string;
 
   constructor(
     private clienteService: ClientesService,
@@ -21,14 +23,29 @@ export class ClientesListComponent implements OnInit{
     this.findAll();
   }
 
-  public findAll(){
+  public findAll() {
     this.clienteService
       .getClientes()
-      .subscribe( resposta => this.clientes = resposta);
+      .subscribe((resposta) => (this.clientes = resposta));
   }
 
-  public novoCadastro(){
+  public novoCadastro() {
     this.router.navigate(['/clientes-form']);
   }
 
+  public getClienteInfo(cliente: Cliente) {
+    this.clienteSelecionado = cliente;
+  }
+
+  public deletar() {
+    this.clienteService
+      .deletar(this.clienteSelecionado!)
+      .subscribe(
+      (resposta) => {
+        this.mensagemSucesso = 'Cliente deletado com sucesso!',
+        this.findAll();
+      },
+      (erro) => (this.mensagemErro = 'Falha ao deletar cliente!')
+    );
+  }
 }

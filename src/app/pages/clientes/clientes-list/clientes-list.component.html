@@ -1,0 +1,88 @@
+<h1 class="mt-4">Lista de Clientes</h1>
+<ol class="breadcrumb mb-4">
+  <li class="breadcrumb-item active">Lista</li>
+</ol>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="alert alert-success" role="alert" *ngIf="mensagemSucesso">
+        Cliente deletado com sucesso!
+      </div>
+      <div
+        class="alert alert-danger"
+        role="alert"
+        *ngIf="mensagemErro"
+      >
+        {{ mensagemErro }}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-2">
+      <button class="btn btn-warning" (click)="novoCadastro()">
+        <i class="fa fa-plus mr-2"></i> Novo
+      </button>
+
+    </div>
+  </div>
+  <br />
+  
+  <!-- Data Table -->
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table table-condensed table-hover">
+        <thead>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>CPF</th>
+          <th>Data de Cadastro</th>
+          <th>Ações</th>
+        </thead>
+        <tbody *ngFor="let cliente of clientes">
+          <td>{{ cliente.id }}</td>
+          <td>{{ cliente.nome }}</td>
+          <td>{{ cliente.cpf }}</td>
+          <td>{{ cliente.dataCadastro }}</td>
+          <td>
+            <button
+              class="btn btn-primary"
+              routerLink="/clientes-form/{{ cliente.id }}"
+            >
+              <i class="fa fa-pen"></i>
+            </button>
+            <button
+              class="btn btn-danger ml-3"
+              data-toggle="modal"
+              data-target="#modalDelete"
+              (click)="getClienteInfo(cliente)"
+            >
+              <i class="fa fa-trash"></i>
+            </button>
+          </td>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal de exclusão -->
+  <div id="modalDelete" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4>Confirmação</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body" *ngIf="clienteSelecionado">
+          Deletar cliente
+          {{clienteSelecionado!.nome}} ?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="deletar()">Deletar</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>

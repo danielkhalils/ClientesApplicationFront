@@ -29,7 +29,7 @@ export class ClientesFormComponent implements OnInit{
     this.findById();
   }
 
-  saveOrUpdate(){
+  public saveOrUpdate(){
     if(this.id){
       //Atualizar Cliente
       this.clienteService

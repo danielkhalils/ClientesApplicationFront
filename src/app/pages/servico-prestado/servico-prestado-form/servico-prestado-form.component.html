@@ -1,0 +1,70 @@
+<h1 class="mt-4">Serviço Prestado</h1>
+<ol class="breadcrumb mb-4">
+  <li class="breadcrumb-item active">Serviços</li>
+</ol>
+<div class="container">
+  <form #form="ngForm" (submit)="saveOrUpdate()">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-success" role="alert" *ngIf="sucesso == true">
+          Serviço salvo/atualizado com sucesso!
+        </div>
+        <div
+          class="alert alert-danger"
+          role="alert"
+          *ngFor="let erro of errors"
+        >
+          {{ erro }}
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label>Cliente: </label>
+          <select class="form-control"
+                  [ngModelOptions]="{ standalone: true }"
+                  [(ngModel)]="servico!.idCliente">
+            <option value="">Selecione...</option>
+            <option *ngFor="let cliente of clientes" [ngValue]="cliente.id">
+              {{ cliente.nome }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Descrição: </label>
+                <input class="form-control" [(ngModel)]="servico!.descricao" type="text" name="descricao" id="inputDescricao">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Data: </label>
+                <input class="form-control" [(ngModel)]="servico!.data" type="text" name="data" id="inputData">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Valor: </label>
+                <input class="form-control" [(ngModel)]="servico!.valor" type="text" name="valor" id="inputValor">
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mb-3">
+      <div class="col-md-3">
+        <button type="submit" class="btn btn-success">
+          <i class="fa fa-save mr-2"></i>Salvar
+        </button>
+        <button type="button" class="btn btn-danger ml-2" (click)="voltar()">
+          <i class="fa fa-arrow-alt-circle-left mr-2"></i>Voltar
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

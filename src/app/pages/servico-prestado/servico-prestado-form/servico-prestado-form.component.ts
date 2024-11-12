@@ -61,7 +61,7 @@ export class ServicoPrestadoFormComponent implements OnInit {
   }
 
   public voltar() {
-    this.router.navigate(['/servico-prestado-list']);
+    this.router.navigate(['/servico-prestado/list']);
   }
 
   public findById(){

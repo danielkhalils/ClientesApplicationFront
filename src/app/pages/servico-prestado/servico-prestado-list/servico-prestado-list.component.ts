@@ -39,6 +39,6 @@ export class ServicoPrestadoListComponent implements OnInit {
   }
 
   public novoCadastro() {
-    this.router.navigate(['/servico-prestado-form']);
+    this.router.navigate(['/servico-prestado/form']);
   }
 } 

@@ -30,7 +30,7 @@ export class ClientesListComponent implements OnInit {
   }
 
   public novoCadastro() {
-    this.router.navigate(['/clientes-form']);
+    this.router.navigate(['/clientes/form']);
   }
 
   public getClienteInfo(cliente: Cliente) {

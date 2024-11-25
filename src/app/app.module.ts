@@ -10,6 +10,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ServicoPrestadoModule } from './pages/servico-prestado/servico-prestado.module';
 import { LoginComponent } from './pages/login/login.component';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from './shared/services/auth.service';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { FormsModule } from '@angular/forms';
   ],
   providers: [
     ClientesService,
-    HttpClient
+    HttpClient,
+    AuthService
   ],
   bootstrap: [
     AppComponent

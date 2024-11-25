@@ -9,19 +9,28 @@ import { Usuario } from '../../shared/model/usuario';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
-  username?: string;
-  password?: string;
-  loginError?: boolean;
+  username!: string;
+  password!: string;
   cadastrando?: boolean;
   mensagemSucesso?: string | null;
+  errors?: String[];
 
   constructor(
-    private router: Router,
+    private router: Router, 
     private authService: AuthService
-  ) { }
+  ) {}
 
   public onSubmit() {
-    this.router.navigate(['/login']);
+    this.authService
+        .tentarLogar(this.username, this.password)
+        .subscribe((response) => {
+          console.log(response);
+          this.router.navigate(['/home']);
+        },
+        (errorResponse) => {
+          this.errors = ['Usuário e/ou senha inválido(s).'];
+        }
+    );
   }
 
   public prepararCadastro(event: { preventDefault: () => void }) {
@@ -33,21 +42,25 @@ export class LoginComponent {
     event.preventDefault();
     this.cadastrando = false;
     this.mensagemSucesso = null;
-    this.loginError = false;
   }
 
-  public cadastrar(){
+  public cadastrar() {
     const usuario: Usuario = new Usuario();
     usuario.username = this.username;
     usuario.password = this.password;
-    this.authService
-        .salvar(usuario)
-        .subscribe( response => {
-          this.mensagemSucesso = "Cadastro realizado com sucesso! Efetue o login.";
-          this.loginError = false;
-        }, error => {
-          this.loginError = true;
-          this.mensagemSucesso = null;
-        })
+    this.authService.salvar(usuario).subscribe(
+      (response) => {
+        this.mensagemSucesso =
+          'Cadastro realizado com sucesso! Efetue o login.';
+        this.cadastrando = false;
+        this.username = '';
+        this.password = '';
+        this.errors = [];
+      },
+      (errorResponse) => {
+        this.mensagemSucesso = null;
+        this.errors = errorResponse.error.errors;
+      }
+    );
   }
 }

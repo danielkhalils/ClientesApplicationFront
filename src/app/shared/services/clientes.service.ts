@@ -9,21 +9,38 @@ import { environment } from '../../environments/environment';
 })
 export class ClientesService {
 
+  apiUrl: string = environment.apiURLBase + '/api/clientes';
+
   constructor(
     private http: HttpClient
   ) {}
 
 
   salvar( cliente : Cliente ) : Observable<Cliente> {
-    return this.http.post<Cliente>(`${environment.cliente}`, cliente);
+    const tokenString = localStorage.getItem('access_token')
+    const token = JSON.parse(tokenString!);
+    const headers = {
+      'Authorization' : 'Bearer' + token.access_token
+    }
+    return this.http.post<Cliente>(`${this.apiUrl}`, cliente, {headers});
   }
 
   atualizar( cliente : Cliente ) : Observable<any> {
-    return this.http.put<Cliente>(`${environment.cliente}/${cliente.id}`, cliente);
+    const tokenString = localStorage.getItem('access_token')
+    const token = JSON.parse(tokenString!);
+    const headers = {
+      'Authorization' : 'Bearer' + token.access_token
+    }
+    return this.http.put<Cliente>(`${this.apiUrl}/${cliente.id}`, cliente, { headers });
   }
 
   getClientes() : Observable<Cliente[]>{
-    return this.http.get<Cliente[]>(`${environment.cliente}`);
+    const tokenString = localStorage.getItem('access_token')
+    const token = JSON.parse(tokenString!);
+    const headers = {
+      'Authorization' : 'Bearer' + token.access_token
+    }
+    return this.http.get<Cliente[]>(`${environment.cliente}`, { headers });
   }
   getClienteById(id: number) : Observable<Cliente>{
     return this.http.get<any>(`${environment.cliente}/${id}`)

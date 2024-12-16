@@ -6,11 +6,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { HomeComponent } from './template/home/home.component';
 import { ClientesModule } from './pages/clientes/clientes.module';
 import { ClientesService } from './shared/services/clientes.service';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { ServicoPrestadoModule } from './pages/servico-prestado/servico-prestado.module';
 import { LoginComponent } from './pages/login/login.component';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from './shared/services/auth.service';
+import { TokenInterceptor } from './token.interceptor';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,12 @@ import { AuthService } from './shared/services/auth.service';
   providers: [
     ClientesService,
     HttpClient,
-    AuthService
+    AuthService,
+    {
+      provide: HTTP_INTERCEPTORS, 
+      useClass: TokenInterceptor, 
+      multi: true
+    }
   ],
   bootstrap: [
     AppComponent

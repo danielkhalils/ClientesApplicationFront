@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
 import { Usuario } from '../../shared/model/usuario';
@@ -6,62 +6,81 @@ import { Usuario } from '../../shared/model/usuario';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
+  styleUrls: ['./login.component.css'],
 })
-export class LoginComponent {
-  username!: string;
-  password!: string;
-  cadastrando?: boolean;
-  mensagemSucesso?: string | null;
-  errors?: String[];
+export class LoginComponent implements OnInit {
+  username?: string;
+  password?: string;
+  loginError?: boolean;
+  cadastroSuccess = false;
+  cadastrando = false;
+  errors?: String[] | null;
+  loading = false; //Para evitar ações enquanto esperar o servidor, as vezes ele demora
 
-  constructor(
-    private router: Router, 
-    private authService: AuthService
-  ) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
-  public onSubmit() {
-    this.authService
-        .tentarLogar(this.username, this.password)
-        .subscribe((response) => {
-          const accesss_token = JSON.stringify(response);
-          localStorage.setItem('accesss_token', accesss_token)
-          this.router.navigate(['/home']);
-        },
-        (errorResponse) => {
-          this.errors = ['Usuário e/ou senha inválido(s).'];
-        }
-    );
+  //Para impedir o user de voltar para esta tela depois de estar logado
+  //E possivel saber disso olhando o token
+  ngOnInit(): void {
+    if (localStorage.getItem('access_token'))
+      this.router.navigate(['clientes', 'lista']);
   }
 
-  public prepararCadastro(event: { preventDefault: () => void }) {
+  onSubmit() {
+    if (!this.loading) {
+      this.loading = true;
+      this.authService.login(this.username!, this.password!).subscribe(
+        (res) => {
+          //Salvando o token no locaStorage
+          const access_token = JSON.stringify(res);
+          localStorage.setItem('access_token', access_token);
+          this.router.navigate(['clientes/lista']);
+          this.loading = false;
+        },
+        (resError) => {
+          this.errors?.push('Usuário ou senha inválido');
+          this.loading = false;
+        }
+      );
+    }
+  }
+
+  prepararCadastro(event: { preventDefault: () => void }) {
     event.preventDefault();
+    this.errors = [];
     this.cadastrando = true;
   }
 
-  public cancelarCadastro(event: { preventDefault: () => void }) {
-    event.preventDefault();
+  cancelarCadastro() {
     this.cadastrando = false;
-    this.mensagemSucesso = null;
+    //Para tirar as mensagens da tela de cadastro
+    this.cadastroSuccess = false;
+    this.errors = [];
+    //Limpando o form
+    this.username = '';
+    this.password = '';
   }
 
-  public cadastrar() {
-    const usuario: Usuario = new Usuario();
+  cadastrar() {
+    this.loading = true;
+    const usuario = new Usuario();
     usuario.username = this.username;
     usuario.password = this.password;
+
     this.authService.salvar(usuario).subscribe(
-      (response) => {
-        this.mensagemSucesso =
-          'Cadastro realizado com sucesso! Efetue o login.';
-        this.cadastrando = false;
-        this.username = '';
-        this.password = '';
-        this.errors = [];
+      (res) => {
+        this.cadastroSuccess = true;
+        this.errors = null;
+        this.loading = false;
       },
-      (errorResponse) => {
-        this.mensagemSucesso = null;
-        this.errors = errorResponse.error.errors;
-      }
+      (errorRes) => {
+        this.cadastroSuccess = false;
+        this.errors = null;
+        console.log(errorRes);
+        this.errors = errorRes.error.errors;
+        this.loading = false;
+      },
+      () => (this.loading = false)
     );
   }
 }

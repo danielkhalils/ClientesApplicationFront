@@ -6,5 +6,6 @@ export const environment = {
     servicoPrestado: 'http://localhost:8080/api/servicos-prestados',
     clientId: 'my-angular-app',
     clientSecret: '@321',
-    obterTokenUrl: '/oauth/token'
+    obterTokenUrl: '/oauth/token',
+    TOKEN_URL:"/oauth/token",
 }

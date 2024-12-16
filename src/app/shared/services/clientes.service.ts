@@ -31,7 +31,7 @@ export class ClientesService {
     const headers = {
       'Authorization' : 'Bearer' + token.access_token
     }
-    return this.http.put<Cliente>(`${this.apiUrl}/${cliente.id}`, cliente, { headers });
+    return this.http.put<Cliente>(`${this.apiUrl}/${cliente.id}`, cliente);
   }
 
   getClientes() : Observable<Cliente[]>{
@@ -40,14 +40,14 @@ export class ClientesService {
     const headers = {
       'Authorization' : 'Bearer' + token.access_token
     }
-    return this.http.get<Cliente[]>(`${environment.cliente}`, { headers });
+    return this.http.get<Cliente[]>(`${this.apiUrl}`, { headers });
   }
   getClienteById(id: number) : Observable<Cliente>{
-    return this.http.get<any>(`${environment.cliente}/${id}`)
+    return this.http.get<any>(`${this.apiUrl}/${id}`)
   }
 
   deletar(cliente: Cliente) : Observable<any>{
-    return this.http.delete<any>(`${environment.cliente}/${cliente.id}`)
+    return this.http.delete<any>(`${this.apiUrl}/${cliente.id}`)
   }
 
 }
